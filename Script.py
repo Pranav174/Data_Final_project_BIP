@@ -1,5 +1,6 @@
 import pymysql
 import pymysql.cursors
+from tabulate import tabulate
 
 def newStudent():
     try:
@@ -11,7 +12,8 @@ def newStudent():
         age = int(input("Age: "))
         ph = input("Phone number: ")
         rm = int(input("Registered Mess: "))
-        sql = "INSERT INTO Students (`roll_no`, `First_name`, `Middle_name`, `Last_name`, `Age`, `Phone_number`, `Monthly_registered_mess`) VALUES ({}, '{}', '{}', '{}', {}, '{}', {});".format(roll_no, first_name,middle_name,last_name,age,ph,rm)
+        sql = "INSERT INTO Students (`roll_no`, `First_name`, `Middle_name`, `Last_name`, `Age`, `Phone_number`, `Monthly_registered_mess`) VALUES ({}, '{}', '{}', '{}', {}, '{}', {});".format(
+            roll_no, first_name, middle_name, last_name, age, ph, rm)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -22,8 +24,10 @@ def newStudent():
         print("Error!!")
         print(e)
 
+
 def newSwipeEntry():
     pass
+
 
 def newFoodItem():
     '''
@@ -31,27 +35,35 @@ def newFoodItem():
     '''
     pass
 
+
 def newIngredient():
     pass
+
 
 def changeMealPrice():
     pass
 
+
 def changeIngredientPrice():
     pass
 
+
 def add_change_registered_mess():
-    #should take meal and mess and student
+    # should take meal and mess and student
     pass
+
 
 def changeEmplyeeSalary():
     pass
 
+
 def deleteFoodItem():
     pass
 
+
 def removeStudent():
     pass
+
 
 def requiredIngredients():
     '''
@@ -59,8 +71,10 @@ def requiredIngredients():
     '''
     pass
 
+
 def messMenu():
     pass
+
 
 def sortMeal():
     '''
@@ -68,11 +82,13 @@ def sortMeal():
     '''
     pass
 
+
 def generate_and_update_revenue():
     '''
     for a day (today) generate all the revenues and cost and expected revenue
     '''
     pass
+
 
 def registered_student_list():
     '''
@@ -80,13 +96,49 @@ def registered_student_list():
     '''
     pass
 
+
 def view():
+    try:
+        cur = connection.cursor()
+        sql = "SHOW TABLES;"
+        cur.execute(sql)
+        all = cur.fetchall()
+        print("AVAILABLE TABLES: ")
+        for i, table in enumerate(all):
+            print("{}. {}".format(i+1, table["Tables_in_MESS_DATABASE"]))
+        table_no = int(input("Enter table number: "))-1
+        cur = connection.cursor()
+        sql = "DESCRIBE {};".format(all[table_no]["Tables_in_MESS_DATABASE"])
+        cur.execute(sql)
+        columns = cur.fetchall()
+        headers = []
+        for field in columns:
+            headers.append(field["Field"])
+        cur = connection.cursor()
+        sql = "SELECT * FROM {};".format(all[table_no]["Tables_in_MESS_DATABASE"])
+        cur.execute(sql)
+        all = cur.fetchall()
+        data = []
+        for row in all:
+            new_row = []
+            for col in headers:
+                new_row.append(row[col])
+            data.append(new_row)
+        print("")
+        print(tabulate(data, headers=headers))
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
     pass
+
 
 def logout():
     connection.close()
     print("Closed the database")
     exit()
+
 
 username = "BIP"
 password = "BIP"
@@ -135,5 +187,3 @@ try:
 
 except Exception as e:
     print(e)
-
-
