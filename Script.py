@@ -49,11 +49,62 @@ def newFoodItem():
     '''
     with ingredients and their quantity
     '''
-    pass
+    try:
+        name = input("Food Item name: ")
+        menu = int(input("Menu ID: "))
+
+        sql = "INSERT INTO Food_items (`Menu_id`, `Name`) VALUES ({}, '{}');".format(menu, name)
+        cur = connection.cursor()
+        cur.execute(sql)
+        sql = "SELECT Food_id FROM Food_items WHERE Menu_id = {} AND Name = '{}';".format(menu, name)
+        cur = connection.cursor()
+        cur.execute(sql)
+        food_id = cur.fetchall()[0]['Food_id']
+        # print(food_id)
+
+        sql = "SELECT * FROM Ingredients;"
+        cur = connection.cursor()
+        cur.execute(sql)
+        print("Available Ingredients: ")
+        printAsTable(cur.fetchall())
+
+        while(1):
+            choice = int(input("Enter ingredient id to be added to the food item (-1 to stop adding): "))
+            if choice == -1:
+                break
+            quantity = int(input("Quantity: "))
+            sql = "INSERT INTO Food_item_ingredients_requirements (`Quantity`, `Food_item_id`, `ingredient_id`) VALUES ({}, {}, {});".format(quantity, food_id, choice)
+            cur = connection.cursor()
+            cur.execute(sql)
+
+
+        # sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(name, cost)
+        # cur = connection.cursor()
+        # cur.execute(sql)
+        connection.commit()
+        # print("Successfully added new ingredient")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
+        exit()
 
 
 def newIngredient():
-    pass
+    try:
+        name = input("Ingredient name: ")
+        cost = int(input("Cost: "))
+        sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(name, cost)
+        cur = connection.cursor()
+        cur.execute(sql)
+        connection.commit()
+        print("Successfully added new ingredient")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
 
 
 def changeMealPrice():
