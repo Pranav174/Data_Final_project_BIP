@@ -26,7 +26,23 @@ def newStudent():
 
 
 def newSwipeEntry():
-    pass
+    try:
+        print("Adding New Swipe entry")
+        student_id = int(input("Student ID: "))
+        mess_id = int(input("Mess ID: "))
+        meal_id = int(input("Meal ID: "))
+        registered_mess = int(input("Registered Mess ID: "))
+        # noinspection SqlNoDataSourceInspection
+        sql = "INSERT INTO card_swipes (`Student_id`, `Mess_id`, `Meal_id`, `Registered_mess`) VALUES ({}, '{}', '{}', '{}');".format(student_id, mess_id, meal_id, registered_mess)
+        cur = connection.cursor()
+        cur.execute(sql)
+        connection.commit()
+        print("Successfully added new swipe entry")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
 
 
 def newFoodItem():
@@ -41,11 +57,40 @@ def newIngredient():
 
 
 def changeMealPrice():
-    pass
+    try:
+        print("Changing meal price")
+        mess_id = int(input("Mess ID: "))
+        meal_id = int(input("Meal ID: "))
+        new_price = int(input("New Price: "))
+        # noinspection SqlNoDataSourceInspection
+        sql = "UPDATE menu SET Price = {} WHERE Mess_id = {} and Meal_id = {};".format(new_price, mess_id, meal_id)
+        cur = connection.cursor()
+        cur.execute(sql)
+        connection.commit()
+        print("Successfully updated price")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
 
 
 def changeIngredientPrice():
-    pass
+    try:
+        print("Changing ingredient price")
+        ingredient_id = int(input("Ingredient ID: "))
+        new_price = int(input("New Price: "))
+        # noinspection SqlNoDataSourceInspection
+        sql = "UPDATE ingredients SET Cost = {} WHERE Ingredients_id = {};".format(new_price, ingredient_id)
+        cur = connection.cursor()
+        cur.execute(sql)
+        connection.commit()
+        print("Successfully updated price")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
 
 
 def add_change_registered_mess():
@@ -91,11 +136,39 @@ def generate_and_update_revenue():
 
 
 def registered_student_list():
-    '''
-    registered students in a mess
-    '''
-    pass
+    try:
+        mess = int(input("Mess Id: "))
+        meal = int(input("Meal Id: "))
+        cur = connection.cursor()
+        # sql = "SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {});".format(mess,meal)
+        sql = "SELECT roll_no, First_name, Last_name FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(mess,meal)
+        # sql = "SELECT (roll_no, First_name, Last_name) FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(mess,meal)
+        # print("lol")
+        cur.execute(sql)
+        # print("lol")
+        all = cur.fetchall()
+        printAsTable(all)
 
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
+
+
+def printAsTable(row_list):
+    if len(row_list):
+        first = row_list[0]
+        headers = first.keys()
+        data=[]
+        for row in row_list:
+            newData = []
+            for col in headers:
+                newData.append(row[col])
+            data.append(newData)
+        print()
+        print(tabulate(data,headers=headers))
+    else:
+        print("EMPTY!")
 
 def view():
     try:
@@ -105,17 +178,17 @@ def view():
         all = cur.fetchall()
         print("AVAILABLE TABLES: ")
         for i, table in enumerate(all):
-            print("{}. {}".format(i+1, table["Tables_in_MESS_DATABASE"]))
+            print("{}. {}".format(i+1, table["Tables_in_{}".format(Database_name)]))
         table_no = int(input("Enter table number: "))-1
         cur = connection.cursor()
-        sql = "DESCRIBE {};".format(all[table_no]["Tables_in_MESS_DATABASE"])
+        sql = "DESCRIBE {};".format(all[table_no]["Tables_in_{}".format(Database_name)])
         cur.execute(sql)
         columns = cur.fetchall()
         headers = []
         for field in columns:
             headers.append(field["Field"])
         cur = connection.cursor()
-        sql = "SELECT * FROM {};".format(all[table_no]["Tables_in_MESS_DATABASE"])
+        sql = "SELECT * FROM {};".format(all[table_no]["Tables_in_{}".format(Database_name)])
         cur.execute(sql)
         all = cur.fetchall()
         data = []
@@ -131,8 +204,6 @@ def view():
         connection.rollback()
         print("Error!!")
         print(e)
-    pass
-
 
 def logout():
     connection.close()
@@ -142,34 +213,34 @@ def logout():
 
 username = "BIP"
 password = "BIP"
-
+Database_name = "LOL"
 # username = input("Username: ")
 # password = input("Password: ")
 
 options = []
 options.append(["Add New student", newStudent])
-options.append(["Add New student", newSwipeEntry])
-options.append(["Add New student", newFoodItem])
-options.append(["Add New student", newIngredient])
-options.append(["Add New student", changeMealPrice])
-options.append(["Add New student", changeIngredientPrice])
-options.append(["Add New student", add_change_registered_mess])
-options.append(["Add New student", changeEmplyeeSalary])
-options.append(["Add New student", deleteFoodItem])
-options.append(["Add New student", removeStudent])
-options.append(["Add New student", requiredIngredients])
-options.append(["Add New student", messMenu])
-options.append(["Add New student", sortMeal])
-options.append(["Add New student", generate_and_update_revenue])
-options.append(["Add New student", view])
+options.append(["Add New swipe entry", newSwipeEntry])
+options.append(["Add New food item", newFoodItem])
+options.append(["Add New ingredient", newIngredient])
+options.append(["Change meal price", changeMealPrice])
+options.append(["Change ingredient price", changeIngredientPrice])
+options.append(["Add or change registered mess", add_change_registered_mess])
+options.append(["Change employee salary", changeEmplyeeSalary])
+options.append(["Delete food item", deleteFoodItem])
+options.append(["Remove student", removeStudent])
+options.append(["View required ingredients", requiredIngredients])
+options.append(["View mess menu", messMenu])
+options.append(["View meal in sorted order", sortMeal])
+options.append(["Generate or update revenue", generate_and_update_revenue])
+options.append(["Registered Student List", registered_student_list])
+options.append(["View any table", view])
 options.append(["Logout", logout])
-
 
 try:
     connection = pymysql.connect(host='localhost',
                                  user=username,
                                  password=password,
-                                 db='MESS_DATABASE',
+                                 db=Database_name,
                                  cursorclass=pymysql.cursors.DictCursor)
     print("Accessed Database Successfully")
     while(1):
