@@ -455,18 +455,14 @@ def view():
         print("Error!!")
         print(e)
 
-
 def logout():
     connection.close()
     print("Closed the database")
     exit()
 
-
-username = "istasis"
-password = "ista2000"
-Database_name = "mess_database"
-# username = input("Username: ")
-# password = input("Password: ")
+username = "BIP"
+password = "BIP"
+Database_name = "MESS_DATABASE"
 
 options = []
 options.append(["Add New student", newStudent])
