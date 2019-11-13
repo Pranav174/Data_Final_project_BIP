@@ -50,7 +50,7 @@ def newSwipeEntry():
 
 def newFoodItem():
     '''
-    with ingredients and their quantity
+    with Ingredients and their quantity
     '''
     try:
         name = input("Food Item name: ")
@@ -139,7 +139,7 @@ def changeIngredientPrice():
         ingredient_id = int(input("Ingredient ID: "))
         new_price = int(input("New Price: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "UPDATE ingredients SET Cost = {} WHERE Ingredients_id = {};".format(
+        sql = "UPDATE Ingredients SET Cost = {} WHERE Ingredients_id = {};".format(
             new_price, ingredient_id)
         cur = connection.cursor()
         cur.execute(sql)
@@ -236,20 +236,20 @@ def removeStudent():
 
 def requiredIngredients():
     '''
-    for all the meals of a day, from all messes, ingredients and quantity required for all their food items
+    for all the meals of a day, from all messes, Ingredients and quantity required for all their food items
     '''
     try:
-        print("Printing required ingredients for the day")
+        print("Printing required Ingredients for the day")
         day = input("Day: ")
         # noinspection SqlNoDataSourceInspection
-        sql = """SELECT ingredients.Name, SUM(Food_item_ingredients_requirements.Quantity) AS Qty, 
-            SUM(Food_item_ingredients_requirements.Quantity) * ingredients.Cost AS Total_cost 
-            FROM Food_item_ingredients_requirements, ingredients 
+        sql = """SELECT Ingredients.Name, SUM(Food_item_ingredients_requirements.Quantity) AS Qty, 
+            SUM(Food_item_ingredients_requirements.Quantity) * Ingredients.Cost AS Total_cost 
+            FROM Food_item_ingredients_requirements, Ingredients 
             WHERE Food_item_ingredients_requirements.Food_item_id IN 
-            (SELECT Food_id FROM food_items WHERE Menu_id IN 
-            (SELECT Menu_id FROM menu WHERE menu.meal_id IN 
-            (SELECT meal_id FROM meal WHERE day='{}'))) 
-            AND ingredients.Ingredients_id = Food_item_ingredients_requirements.ingredient_id 
+            (SELECT Food_id FROM Food_items WHERE Menu_id IN 
+            (SELECT Menu_id FROM Menu WHERE Menu.meal_id IN 
+            (SELECT meal_id FROM Meal WHERE day='{}'))) 
+            AND Ingredients.Ingredients_id = Food_item_ingredients_requirements.ingredient_id 
             GROUP BY ingredient_id;""".format(day)
         cur = connection.cursor()
         cur.execute(sql)
@@ -477,7 +477,7 @@ options.append(["Add or change registered mess", add_change_registered_mess])
 options.append(["Change employee salary", changeEmplyeeSalary])
 options.append(["Delete food item", deleteFoodItem])
 options.append(["Remove student", removeStudent])
-options.append(["View required ingredients", requiredIngredients])
+options.append(["View required Ingredients", requiredIngredients])
 options.append(["View mess menu", messMenu])
 options.append(["View meal in sorted order", sortMeal])
 options.append(["Generate and update revenue for all mess", generate_and_update_revenue])
