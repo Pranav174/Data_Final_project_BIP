@@ -1,6 +1,7 @@
 import pymysql
 import pymysql.cursors
 from tabulate import tabulate
+import datetime
 
 
 def newStudent():
@@ -34,7 +35,8 @@ def newSwipeEntry():
         meal_id = int(input("Meal ID: "))
         registered_mess = int(input("Registered Mess ID: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "INSERT INTO card_swipes (`Student_id`, `Mess_id`, `Meal_id`, `Registered_mess`) VALUES ({}, '{}', '{}', '{}');".format(student_id, mess_id, meal_id, registered_mess)
+        sql = "INSERT INTO card_swipes (`Student_id`, `Mess_id`, `Meal_id`, `Registered_mess`) VALUES ({}, '{}', '{}', '{}');".format(
+            student_id, mess_id, meal_id, registered_mess)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -54,10 +56,12 @@ def newFoodItem():
         name = input("Food Item name: ")
         menu = int(input("Menu ID: "))
 
-        sql = "INSERT INTO Food_items (`Menu_id`, `Name`) VALUES ({}, '{}');".format(menu, name)
+        sql = "INSERT INTO Food_items (`Menu_id`, `Name`) VALUES ({}, '{}');".format(
+            menu, name)
         cur = connection.cursor()
         cur.execute(sql)
-        sql = "SELECT Food_id FROM Food_items WHERE Menu_id = {} AND Name = '{}';".format(menu, name)
+        sql = "SELECT Food_id FROM Food_items WHERE Menu_id = {} AND Name = '{}';".format(
+            menu, name)
         cur = connection.cursor()
         cur.execute(sql)
         food_id = cur.fetchall()[0]['Food_id']
@@ -70,14 +74,15 @@ def newFoodItem():
         printAsTable(cur.fetchall())
 
         while(1):
-            choice = int(input("Enter ingredient id to be added to the food item (-1 to stop adding): "))
+            choice = int(
+                input("Enter ingredient id to be added to the food item (-1 to stop adding): "))
             if choice == -1:
                 break
             quantity = int(input("Quantity: "))
-            sql = "INSERT INTO Food_item_ingredients_requirements (`Quantity`, `Food_item_id`, `ingredient_id`) VALUES ({}, {}, {});".format(quantity, food_id, choice)
+            sql = "INSERT INTO Food_item_ingredients_requirements (`Quantity`, `Food_item_id`, `ingredient_id`) VALUES ({}, {}, {});".format(
+                quantity, food_id, choice)
             cur = connection.cursor()
             cur.execute(sql)
-
 
         # sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(name, cost)
         # cur = connection.cursor()
@@ -89,15 +94,14 @@ def newFoodItem():
         connection.rollback()
         print("Error!!")
         print(e)
-        exit()
-
 
 
 def newIngredient():
     try:
         name = input("Ingredient name: ")
         cost = int(input("Cost: "))
-        sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(name, cost)
+        sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(
+            name, cost)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -109,7 +113,6 @@ def newIngredient():
         print(e)
 
 
-
 def changeMealPrice():
     try:
         print("Changing meal price")
@@ -117,7 +120,8 @@ def changeMealPrice():
         meal_id = int(input("Meal ID: "))
         new_price = int(input("New Price: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "UPDATE menu SET Price = {} WHERE Mess_id = {} and Meal_id = {};".format(new_price, mess_id, meal_id)
+        sql = "UPDATE menu SET Price = {} WHERE Mess_id = {} and Meal_id = {};".format(
+            new_price, mess_id, meal_id)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -135,7 +139,8 @@ def changeIngredientPrice():
         ingredient_id = int(input("Ingredient ID: "))
         new_price = int(input("New Price: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "UPDATE ingredients SET Cost = {} WHERE Ingredients_id = {};".format(new_price, ingredient_id)
+        sql = "UPDATE ingredients SET Cost = {} WHERE Ingredients_id = {};".format(
+            new_price, ingredient_id)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -146,6 +151,7 @@ def changeIngredientPrice():
         print("Error!!")
         print(e)
 
+
 def add_change_registered_mess():
     try:
         print("Changing mess registration")
@@ -153,16 +159,19 @@ def add_change_registered_mess():
         student_id = int(input("Student ID: "))
         meal_id = int(input("Meal ID: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "SELECT * FROM registration WHERE student_id = {} AND meal_id = {};".format(student_id, meal_id)
+        sql = "SELECT * FROM registration WHERE student_id = {} AND meal_id = {};".format(
+            student_id, meal_id)
         cur = connection.cursor()
         cur.execute(sql)
         # connection.commit()
         if cur.rowcount == 1:
             # noinspection SqlNoDataSourceInspection
-            sql = "UPDATE registration SET registered_mess_id = {} WHERE student_id = {} AND meal_id = {};".format(mess_id, student_id, meal_id)
+            sql = "UPDATE registration SET registered_mess_id = {} WHERE student_id = {} AND meal_id = {};".format(
+                mess_id, student_id, meal_id)
         else:
             # noinspection SqlNoDataSourceInspection
-            sql = "INSERT INTO registration (`registered_mess_id`, `student_id`, `meal_id`) VALUES ({}, {}, {})".format(mess_id, student_id, meal_id)
+            sql = "INSERT INTO registration (`registered_mess_id`, `student_id`, `meal_id`) VALUES ({}, {}, {})".format(
+                mess_id, student_id, meal_id)
         cur.execute(sql)
         connection.commit()
 
@@ -171,13 +180,15 @@ def add_change_registered_mess():
         print("Error!!")
         print(e)
 
+
 def changeEmplyeeSalary():
     try:
         print("Changing employee salary")
         emp_id = int(input("Employee ID: "))
         new_salary = int(input("New Salary: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "UPDATE employee SET Salary = {} WHERE Employee_id = {};".format(new_salary, emp_id)
+        sql = "UPDATE employee SET Salary = {} WHERE Employee_id = {};".format(
+            new_salary, emp_id)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -206,7 +217,6 @@ def deleteFoodItem():
         print(e)
 
 
-
 def removeStudent():
     try:
         print("Deleting student")
@@ -224,7 +234,6 @@ def removeStudent():
         print(e)
 
 
-
 def requiredIngredients():
     '''
     for all the meals of a day, from all messes, ingredients and quantity required for all their food items
@@ -233,30 +242,31 @@ def requiredIngredients():
         print("Printing required ingredients for the day")
         day = input("Day: ")
         # noinspection SqlNoDataSourceInspection
-        sql = """SELECT ingredients.Name, SUM(food_item_ingredients_requirements.Quantity) AS Qty, 
-            SUM(food_item_ingredients_requirements.Quantity) * ingredients.Cost AS Total_cost 
-            FROM food_item_ingredients_requirements, ingredients 
-            WHERE food_item_ingredients_requirements.Food_item_id IN 
+        sql = """SELECT ingredients.Name, SUM(Food_item_ingredients_requirements.Quantity) AS Qty, 
+            SUM(Food_item_ingredients_requirements.Quantity) * ingredients.Cost AS Total_cost 
+            FROM Food_item_ingredients_requirements, ingredients 
+            WHERE Food_item_ingredients_requirements.Food_item_id IN 
             (SELECT Food_id FROM food_items WHERE Menu_id IN 
             (SELECT Menu_id FROM menu WHERE menu.meal_id IN 
             (SELECT meal_id FROM meal WHERE day='{}'))) 
-            AND ingredients.Ingredients_id = food_item_ingredients_requirements.ingredient_id 
+            AND ingredients.Ingredients_id = Food_item_ingredients_requirements.ingredient_id 
             GROUP BY ingredient_id;""".format(day)
         cur = connection.cursor()
         cur.execute(sql)
         rows = cur.fetchall()
         desc = cur.description
 
-        print("{0:>20} {1:>20} {2:>20}".format(desc[0][0], desc[1][0], desc[2][0]))
+        print("{0:>20} {1:>20} {2:>20}".format(
+            desc[0][0], desc[1][0], desc[2][0]))
 
         for row in rows:
-            print("{0:>20} {1:>20} {2:>20}".format(row['Name'], row['Qty'], row['Total_cost']))
+            print("{0:>20} {1:>20} {2:>20}".format(
+                row['Name'], row['Qty'], row['Total_cost']))
 
     except Exception as e:
         connection.rollback()
         print("Error!!")
         print(e)
-
 
 
 def messMenu():
@@ -271,16 +281,19 @@ def sortMeal():
         print("Printing popular meals in a mess")
         mess = input("Mess ID: ")
         # noinspection SqlNoDataSourceInspection
-        sql = "SELECT meal.Day AS Day, meal.Time AS Time, COUNT(card_swipes.swipe_id) AS Students FROM meal, card_swipes WHERE card_swipes.Mess_id = {} AND meal.Meal_id = card_swipes.Meal_id GROUP BY meal.meal_id ORDER BY COUNT(card_swipes.swipe_id) DESC;".format(mess)
+        sql = "SELECT meal.Day AS Day, meal.Time AS Time, COUNT(card_swipes.swipe_id) AS Students FROM meal, card_swipes WHERE card_swipes.Mess_id = {} AND meal.Meal_id = card_swipes.Meal_id GROUP BY meal.meal_id ORDER BY COUNT(card_swipes.swipe_id) DESC;".format(
+            mess)
         cur = connection.cursor()
         cur.execute(sql)
         rows = cur.fetchall()
         desc = cur.description
 
-        print("{0:>20} {1:>20} {2:>20}".format(desc[0][0], desc[1][0], desc[2][0]))
+        print("{0:>20} {1:>20} {2:>20}".format(
+            desc[0][0], desc[1][0], desc[2][0]))
 
         for row in rows:
-            print("{0:>20} {1:>20} {2:>20}".format(row['Day'], row['Time'], row['Students']))
+            print("{0:>20} {1:>20} {2:>20}".format(
+                row['Day'], row['Time'], row['Students']))
 
     except Exception as e:
         connection.rollback()
@@ -294,23 +307,56 @@ def generate_and_update_revenue():
     for a day (today) generate all the revenues and cost and expected revenue
     '''
     try:
-        day = int(input("Day(1-7): "))
+        date = datetime.datetime.today().strftime("%Y-%m-%d")
+        meal = int(input("Meal Id: "))
         sql = "SELECT * FROM Mess;"
         cur = connection.cursor()
         cur.execute(sql)
-        print("Messes: ")
         all = cur.fetchall()
-        printAsTable(all)
         for mess in all:
             id = mess['Mess_id']
-            name = mess['Name']
-
+            total_cost = 0
+            expected_revenue = 0
+            total_revenue = 0
+            sql = """SELECT SUM(Total_cost) AS COST FROM (SELECT SUM(Food_item_ingredients_requirements.Quantity) * Ingredients.Cost AS Total_cost 
+        FROM Food_item_ingredients_requirements, Ingredients 
+        WHERE Food_item_ingredients_requirements.Food_item_id IN 
+        (SELECT Food_id FROM Food_items WHERE Menu_id IN 
+        (SELECT Menu_id FROM Menu WHERE Mess_id = {} AND Meal_id = {}))
+        AND Ingredients.Ingredients_id = Food_item_ingredients_requirements.ingredient_id
+        GROUP BY ingredient_id) AS T;""".format(id, meal)
+            cur = connection.cursor()
+            cur.execute(sql)
+            next = cur.fetchone()
+            cost = next["COST"]
+            if(cost):
+                total_cost += cost
+            sql = "SELECT Price FROM Menu WHERE Mess_id = {} AND Meal_id = {}".format(id, meal)
+            cur = connection.cursor()
+            cur.execute(sql)
+            next = cur.fetchone()
+            if(next):
+                price = next["Price"]
+                sql = "SELECT COUNT(*) FROM Registration WHERE registered_mess_id = {} AND meal_id = {}".format(id, meal)
+                cur = connection.cursor()
+                cur.execute(sql)
+                expected_students = cur.fetchall()[0]["COUNT(*)"]
+                expected_revenue += expected_students * price
+                sql = "SELECT COUNT(*) FROM Card_swipes WHERE Mess_id = {} AND Meal_id = {} AND DATE(Swipe_time) = '{}'".format(id, meal, date)
+                cur = connection.cursor()
+                cur.execute(sql)
+                actual_students = cur.fetchall()[0]["COUNT(*)"]
+                total_revenue += actual_students * price
+            sql = "INSERT INTO Revenue (`Mess_id`, `Meal_id`, `Date`, `Cost`, `Expected_revenue`, `Actual_revenue`) VALUES ({}, {}, '{}',{},{},{})".format(
+                id, meal, date, total_cost, expected_revenue, total_revenue)
+            cur =connection.cursor()
+            cur.execute(sql)
+            connection.commit()              
 
     except Exception as e:
         connection.rollback()
         print("Error!!")
         print(e)
-        exit()
 
 
 def registered_student_list():
@@ -319,7 +365,8 @@ def registered_student_list():
         meal = int(input("Meal Id: "))
         cur = connection.cursor()
         # sql = "SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {});".format(mess,meal)
-        sql = "SELECT roll_no, First_name, Last_name FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(mess,meal)
+        sql = "SELECT roll_no, First_name, Last_name FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(
+            mess, meal)
         # sql = "SELECT (roll_no, First_name, Last_name) FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(mess,meal)
         # print("lol")
         cur.execute(sql)
@@ -337,16 +384,17 @@ def printAsTable(row_list):
     if len(row_list):
         first = row_list[0]
         headers = first.keys()
-        data=[]
+        data = []
         for row in row_list:
             newData = []
             for col in headers:
                 newData.append(row[col])
             data.append(newData)
         print()
-        print(tabulate(data,headers=headers))
+        print(tabulate(data, headers=headers))
     else:
         print("EMPTY!")
+
 
 def view():
     try:
@@ -356,17 +404,20 @@ def view():
         all = cur.fetchall()
         print("AVAILABLE TABLES: ")
         for i, table in enumerate(all):
-            print("{}. {}".format(i+1, table["Tables_in_{}".format(Database_name)]))
+            print("{}. {}".format(
+                i+1, table["Tables_in_{}".format(Database_name)]))
         table_no = int(input("Enter table number: "))-1
         cur = connection.cursor()
-        sql = "DESCRIBE {};".format(all[table_no]["Tables_in_{}".format(Database_name)])
+        sql = "DESCRIBE {};".format(
+            all[table_no]["Tables_in_{}".format(Database_name)])
         cur.execute(sql)
         columns = cur.fetchall()
         headers = []
         for field in columns:
             headers.append(field["Field"])
         cur = connection.cursor()
-        sql = "SELECT * FROM {};".format(all[table_no]["Tables_in_{}".format(Database_name)])
+        sql = "SELECT * FROM {};".format(all[table_no]
+                                         ["Tables_in_{}".format(Database_name)])
         cur.execute(sql)
         all = cur.fetchall()
         data = []
@@ -382,6 +433,7 @@ def view():
         connection.rollback()
         print("Error!!")
         print(e)
+
 
 def logout():
     connection.close()
@@ -409,7 +461,7 @@ options.append(["Remove student", removeStudent])
 options.append(["View required ingredients", requiredIngredients])
 options.append(["View mess menu", messMenu])
 options.append(["View meal in sorted order", sortMeal])
-options.append(["Generate or update revenue", generate_and_update_revenue])
+options.append(["Generate and update revenue for all mess", generate_and_update_revenue])
 options.append(["Registered Student List", registered_student_list])
 options.append(["View any table", view])
 options.append(["Logout", logout])
