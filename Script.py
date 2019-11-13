@@ -314,7 +314,24 @@ def generate_and_update_revenue():
     '''
     for a day (today) generate all the revenues and cost and expected revenue
     '''
-    pass
+    try:
+        day = int(input("Day(1-7): "))
+        sql = "SELECT * FROM Mess;"
+        cur = connection.cursor()
+        cur.execute(sql)
+        print("Messes: ")
+        all = cur.fetchall()
+        printAsTable(all)
+        for mess in all:
+            id = mess['Mess_id']
+            name = mess['Name']
+
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
+        exit()
 
 
 def registered_student_list():
