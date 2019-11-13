@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
--- Host: localhost    Database: MESS_DATABASE
+-- Host: localhost    Database: LOL
 -- ------------------------------------------------------
 -- Server version	5.7.27-0ubuntu0.18.04.1
 
@@ -47,7 +47,7 @@ CREATE TABLE `Card_swipes` (
 
 LOCK TABLES `Card_swipes` WRITE;
 /*!40000 ALTER TABLE `Card_swipes` DISABLE KEYS */;
-INSERT INTO `Card_swipes` VALUES (1,201111111,1,3,'2019-10-27 17:35:31',1),(2,201301023,2,5,'2019-10-28 14:10:31',1),(3,201611101,1,2,'2019-10-27 14:09:00',4),(4,201111111,3,1,'2019-10-20 07:51:51',1),(5,201666017,3,14,'2019-10-31 12:37:56',3),(6,201710111,2,21,'2019-11-02 21:08:52',2),(7,201811117,1,19,'2019-11-02 08:53:21',2),(8,201301023,3,8,'2019-10-29 13:53:21',3),(9,201910118,2,7,'2019-10-29 08:45:34',4),(10,201811117,3,13,'2019-10-31 07:45:48',3),(11,201710111,1,15,'2019-10-31 17:45:48',1),(12,201111111,4,2,'2019-10-27 14:09:00',4),(13,201666017,4,15,'2019-10-07 20:43:32',3);
+INSERT INTO `Card_swipes` VALUES (2,201301023,2,5,'2019-10-28 14:10:31',1),(3,201611101,1,2,'2019-11-13 14:09:00',4),(5,201666017,3,14,'2019-10-31 12:37:56',3),(6,201710111,2,21,'2019-11-02 21:08:52',2),(7,201811117,1,19,'2019-11-02 08:53:21',2),(8,201301023,3,8,'2019-10-29 13:53:21',3),(9,201910118,2,7,'2019-10-29 08:45:34',4),(10,201811117,3,13,'2019-10-31 07:45:48',3),(11,201710111,1,15,'2019-10-31 17:45:48',1),(13,201666017,4,15,'2019-10-07 20:43:32',3);
 /*!40000 ALTER TABLE `Card_swipes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +100,7 @@ CREATE TABLE `Food_item_ingredients_requirements` (
   KEY `fk_Food_item_ingredients_requirements_2_idx` (`Food_item_id`),
   CONSTRAINT `fk_Food_item_ingredients_requirements_1` FOREIGN KEY (`ingredient_id`) REFERENCES `Ingredients` (`Ingredients_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_Food_item_ingredients_requirements_2` FOREIGN KEY (`Food_item_id`) REFERENCES `Food_items` (`Food_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -109,7 +109,7 @@ CREATE TABLE `Food_item_ingredients_requirements` (
 
 LOCK TABLES `Food_item_ingredients_requirements` WRITE;
 /*!40000 ALTER TABLE `Food_item_ingredients_requirements` DISABLE KEYS */;
-INSERT INTO `Food_item_ingredients_requirements` VALUES (1,20,2,1),(2,10,2,5),(3,10,2,6),(4,40,1,4),(5,30,1,2),(6,20,4,8),(7,15,4,7);
+INSERT INTO `Food_item_ingredients_requirements` VALUES (1,20,2,1),(2,10,2,5),(3,10,2,6),(4,40,1,4),(5,30,1,2),(6,20,4,8),(7,15,4,7),(8,2,14,3),(9,1,14,7),(10,1,14,10);
 /*!40000 ALTER TABLE `Food_item_ingredients_requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ CREATE TABLE `Food_items` (
   PRIMARY KEY (`Food_id`),
   KEY `food_item_menu_idx` (`Menu_id`),
   CONSTRAINT `food_item_menu` FOREIGN KEY (`Menu_id`) REFERENCES `Menu` (`Menu_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +136,7 @@ CREATE TABLE `Food_items` (
 
 LOCK TABLES `Food_items` WRITE;
 /*!40000 ALTER TABLE `Food_items` DISABLE KEYS */;
-INSERT INTO `Food_items` VALUES (1,1,'Aloo Paratha'),(2,1,'Curd'),(3,2,'Biryani'),(4,2,'Custard'),(5,4,'Raita'),(6,3,'Paneer Paratha'),(7,7,'Idli'),(8,3,'Sambhar'),(9,5,'Banana'),(10,1,'Dal');
+INSERT INTO `Food_items` VALUES (1,1,'Aloo Paratha'),(2,1,'Curd'),(3,2,'Biryani'),(4,2,'Custard'),(5,4,'Raita'),(6,3,'Paneer Paratha'),(7,7,'Idli'),(8,3,'Sambhar'),(9,5,'Banana'),(10,1,'Dal'),(14,6,'kakaka');
 /*!40000 ALTER TABLE `Food_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +152,7 @@ CREATE TABLE `Ingredients` (
   `Name` varchar(100) NOT NULL,
   `Cost` int(11) NOT NULL,
   PRIMARY KEY (`Ingredients_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +161,7 @@ CREATE TABLE `Ingredients` (
 
 LOCK TABLES `Ingredients` WRITE;
 /*!40000 ALTER TABLE `Ingredients` DISABLE KEYS */;
-INSERT INTO `Ingredients` VALUES (1,'Rice',500),(2,'Flour',700),(3,'Cabbage',300),(4,'Potato',800),(5,'Onion',700),(6,'Tomato',900),(7,'Milk',600),(8,'Sugar',1000),(9,'Salt',800),(10,'Pepper',1200);
+INSERT INTO `Ingredients` VALUES (1,'Rice',500),(2,'Flour',700),(3,'Cabbage',300),(4,'Potato',800),(5,'Onion',700),(6,'Tomato',900),(7,'Milk',600),(8,'Sugar',1000),(9,'Salt',800),(10,'Pepper',1200),(11,'kk',60);
 /*!40000 ALTER TABLE `Ingredients` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +216,7 @@ CREATE TABLE `Menu` (
 
 LOCK TABLES `Menu` WRITE;
 /*!40000 ALTER TABLE `Menu` DISABLE KEYS */;
-INSERT INTO `Menu` VALUES (1,1,1,25),(2,1,2,25),(3,1,3,50),(4,2,1,24),(5,2,2,24),(6,2,3,52),(7,3,1,27),(8,3,2,27),(9,3,3,52),(10,4,1,20),(11,4,2,25),(12,4,3,50),(13,1,6,50),(14,2,7,22),(15,3,15,90);
+INSERT INTO `Menu` VALUES (1,1,10,25),(2,1,2,25),(3,1,3,50),(4,2,1,24),(5,2,2,24),(6,2,3,52),(7,3,1,27),(8,3,2,27),(9,3,3,52),(10,4,1,20),(11,4,2,25),(12,4,3,50),(13,1,6,50),(14,2,7,22),(15,3,15,90);
 /*!40000 ALTER TABLE `Menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,10 +262,10 @@ CREATE TABLE `Registration` (
   KEY `registered_mess_idx` (`registered_mess_id`),
   KEY `registered_student_id_idx` (`student_id`),
   KEY `registered_meal_id_idx` (`meal_id`),
-  CONSTRAINT `registered_meal_id` FOREIGN KEY (`meal_id`) REFERENCES `Meal` (`Meal_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `registered_meal_id` FOREIGN KEY (`meal_id`) REFERENCES `Meal` (`Meal_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `registered_mess_id` FOREIGN KEY (`registered_mess_id`) REFERENCES `Mess` (`Mess_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `registered_student_id` FOREIGN KEY (`student_id`) REFERENCES `Students` (`roll_no`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+  CONSTRAINT `registered_student_id` FOREIGN KEY (`student_id`) REFERENCES `Students` (`roll_no`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +274,7 @@ CREATE TABLE `Registration` (
 
 LOCK TABLES `Registration` WRITE;
 /*!40000 ALTER TABLE `Registration` DISABLE KEYS */;
-INSERT INTO `Registration` VALUES (1,1,201111111,3),(2,1,201301023,5),(3,4,201611101,2),(4,1,201111111,1),(5,3,201666017,14),(6,2,201710111,21),(7,2,201811117,19),(8,3,201301023,8),(9,4,201910118,7),(10,3,201811117,13),(11,1,201710111,15),(12,4,201111111,2),(13,3,201666017,15);
+INSERT INTO `Registration` VALUES (2,1,201301023,5),(3,4,201611101,2),(5,3,201666017,14),(6,2,201710111,21),(7,2,201811117,19),(8,3,201301023,8),(9,4,201910118,7),(10,3,201811117,13),(11,1,201710111,15),(13,3,201666017,15),(14,1,201811117,2);
 /*!40000 ALTER TABLE `Registration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +298,7 @@ CREATE TABLE `Revenue` (
   KEY `revenue_mess_idx` (`Mess_id`),
   CONSTRAINT `revenue_meal` FOREIGN KEY (`Meal_id`) REFERENCES `Meal` (`Meal_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `revenue_mess` FOREIGN KEY (`Mess_id`) REFERENCES `Mess` (`Mess_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,7 +307,7 @@ CREATE TABLE `Revenue` (
 
 LOCK TABLES `Revenue` WRITE;
 /*!40000 ALTER TABLE `Revenue` DISABLE KEYS */;
-INSERT INTO `Revenue` VALUES (1,1,1,'2019-10-27',10000,20000,17085),(2,1,2,'2019-11-03',15000,25000,26000),(3,1,3,'2019-11-03',12000,17000,18081),(4,2,4,'2019-10-28',14000,18000,18000),(5,2,5,'2019-10-21',12000,16000,15891),(6,2,6,'2019-11-04',17000,20000,21000),(7,3,7,'2019-11-05',11000,17000,16890),(8,3,8,'2019-10-29',12000,17000,18000),(9,4,16,'2019-11-01',18000,19000,19000),(10,2,17,'2019-10-25',19000,24000,24056),(11,4,18,'2019-11-08',10000,14000,15000);
+INSERT INTO `Revenue` VALUES (1,1,1,'2019-10-27',10000,20000,17085),(2,1,2,'2019-11-03',15000,25000,26000),(3,1,3,'2019-11-03',12000,17000,18081),(4,2,4,'2019-10-28',14000,18000,18000),(5,2,5,'2019-10-21',12000,16000,15891),(6,2,6,'2019-11-04',17000,20000,21000),(7,3,7,'2019-11-05',11000,17000,16890),(8,3,8,'2019-10-29',12000,17000,18000),(9,4,16,'2019-11-01',18000,19000,19000),(10,2,17,'2019-10-25',19000,24000,24056),(11,4,18,'2019-11-08',10000,14000,15000),(12,1,1,'2019-11-13',0,0,0),(13,2,1,'2019-11-13',0,0,0),(14,3,1,'2019-11-13',0,0,0),(15,4,1,'2019-11-13',0,0,0),(16,1,2,'2019-11-13',29000,0,0),(17,2,2,'2019-11-13',0,0,0),(18,3,2,'2019-11-13',0,0,0),(19,4,2,'2019-11-13',0,50,0),(20,1,2,'2019-11-13',29000,25,0),(21,2,2,'2019-11-13',0,0,0),(22,3,2,'2019-11-13',0,0,0),(23,4,2,'2019-11-13',0,50,0),(24,1,2,'2019-11-13',29000,25,25),(25,2,2,'2019-11-13',0,0,0),(26,3,2,'2019-11-13',0,0,0),(27,4,2,'2019-11-13',0,50,0),(28,1,2,'2019-11-13',29000,25,25),(29,2,2,'2019-11-13',0,0,0),(30,3,2,'2019-11-13',0,0,0),(31,4,2,'2019-11-13',0,50,0),(32,1,2,'2019-11-13',29000,25,25),(33,2,2,'2019-11-13',0,0,0),(34,3,2,'2019-11-13',0,0,0),(35,4,2,'2019-11-13',0,50,0);
 /*!40000 ALTER TABLE `Revenue` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -328,7 +328,7 @@ CREATE TABLE `Students` (
   `Monthly_registered_mess` int(11) DEFAULT NULL,
   PRIMARY KEY (`roll_no`),
   KEY `registered_mess_idx` (`Monthly_registered_mess`),
-  CONSTRAINT `registered_mess` FOREIGN KEY (`Monthly_registered_mess`) REFERENCES `Mess` (`Mess_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `registered_mess` FOREIGN KEY (`Monthly_registered_mess`) REFERENCES `Mess` (`Mess_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -338,7 +338,7 @@ CREATE TABLE `Students` (
 
 LOCK TABLES `Students` WRITE;
 /*!40000 ALTER TABLE `Students` DISABLE KEYS */;
-INSERT INTO `Students` VALUES (201111111,'Suresh',NULL,'Patel',20,'9999999919',NULL),(201301023,'Kalpana ','P','Chawla',18,'7676767676',3),(201611101,'Rajpal','J','Yadav',22,'6767676767',NULL),(201666017,'Max','Good','Boy',22,'9876543210',1),(201710111,'Rakesh',NULL,'Sharma',23,'9595995955',1),(201810101,'Chintu',NULL,'Sharma',19,'9999911111',1),(201810103,'Mintu',NULL,'Bansal ',19,'9898989898',4),(201811117,'Nemo',NULL,'Chaturvedi',18,'8888888888',1),(201910101,'Ramesh','M','Kathuria',20,'9797979797',NULL),(201910118,'Dory',NULL,'John',21,'9456782190',3);
+INSERT INTO `Students` VALUES (201301023,'Kalpana ','P','Chawla',18,'7676767676',3),(201611101,'Rajpal','J','Yadav',22,'6767676767',NULL),(201666017,'Max','Good','Boy',22,'9876543210',1),(201710111,'Rakesh',NULL,'Sharma',23,'9595995955',1),(201810101,'Chintu',NULL,'Sharma',19,'9999911111',1),(201810103,'Mintu',NULL,'Bansal ',19,'9898989898',4),(201811117,'Nemo',NULL,'Chaturvedi',18,'8888888888',1),(201910101,'Ramesh','M','Kathuria',20,'9797979797',NULL),(201910118,'Dory',NULL,'John',21,'9456782190',3);
 /*!40000 ALTER TABLE `Students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -351,4 +351,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-11-13  3:45:27
+-- Dump completed on 2019-11-13  9:11:06

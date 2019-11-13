@@ -222,7 +222,7 @@ def removeStudent():
         print("Deleting student")
         student_id = int(input("Student ID: "))
         # noinspection SqlNoDataSourceInspection
-        sql = "DELETE FROM students WHERE roll_no = {}".format(student_id)
+        sql = "DELETE FROM Students WHERE roll_no = {}".format(student_id)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -302,7 +302,7 @@ def sortMeal():
         print("Printing popular meals in a mess")
         mess = input("Mess ID: ")
         # noinspection SqlNoDataSourceInspection
-        sql = "SELECT meal.Day AS Day, meal.Time AS Time, COUNT(card_swipes.swipe_id) AS Students FROM meal, card_swipes WHERE card_swipes.Mess_id = {} AND meal.Meal_id = card_swipes.Meal_id GROUP BY meal.meal_id ORDER BY COUNT(card_swipes.swipe_id) DESC;".format(
+        sql = "SELECT Meal.Day AS Day, Meal.Time AS Time, COUNT(Card_swipes.swipe_id) AS Students FROM Meal, Card_swipes WHERE Card_swipes.Mess_id = {} AND Meal.Meal_id = Card_swipes.Meal_id GROUP BY Meal.meal_id ORDER BY COUNT(Card_swipes.swipe_id) DESC;".format(
             mess)
         cur = connection.cursor()
         cur.execute(sql)
