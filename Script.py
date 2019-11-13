@@ -1,5 +1,6 @@
 import pymysql
 import pymysql.cursors
+from tabulate import tabulate
 
 
 def newStudent():
@@ -12,8 +13,8 @@ def newStudent():
         age = int(input("Age: "))
         ph = input("Phone number: ")
         rm = int(input("Registered Mess: "))
-        # noinspection SqlNoDataSourceInspection
-        sql = "INSERT INTO Students (`roll_no`, `First_name`, `Middle_name`, `Last_name`, `Age`, `Phone_number`, `Monthly_registered_mess`) VALUES ({}, '{}', '{}', '{}', {}, '{}', {});".format(roll_no, first_name,middle_name,last_name,age,ph,rm)
+        sql = "INSERT INTO Students (`roll_no`, `First_name`, `Middle_name`, `Last_name`, `Age`, `Phone_number`, `Monthly_registered_mess`) VALUES ({}, '{}', '{}', '{}', {}, '{}', {});".format(
+            roll_no, first_name, middle_name, last_name, age, ph, rm)
         cur = connection.cursor()
         cur.execute(sql)
         connection.commit()
@@ -49,11 +50,64 @@ def newFoodItem():
     '''
     with ingredients and their quantity
     '''
-    pass
+    try:
+        name = input("Food Item name: ")
+        menu = int(input("Menu ID: "))
+
+        sql = "INSERT INTO Food_items (`Menu_id`, `Name`) VALUES ({}, '{}');".format(menu, name)
+        cur = connection.cursor()
+        cur.execute(sql)
+        sql = "SELECT Food_id FROM Food_items WHERE Menu_id = {} AND Name = '{}';".format(menu, name)
+        cur = connection.cursor()
+        cur.execute(sql)
+        food_id = cur.fetchall()[0]['Food_id']
+        # print(food_id)
+
+        sql = "SELECT * FROM Ingredients;"
+        cur = connection.cursor()
+        cur.execute(sql)
+        print("Available Ingredients: ")
+        printAsTable(cur.fetchall())
+
+        while(1):
+            choice = int(input("Enter ingredient id to be added to the food item (-1 to stop adding): "))
+            if choice == -1:
+                break
+            quantity = int(input("Quantity: "))
+            sql = "INSERT INTO Food_item_ingredients_requirements (`Quantity`, `Food_item_id`, `ingredient_id`) VALUES ({}, {}, {});".format(quantity, food_id, choice)
+            cur = connection.cursor()
+            cur.execute(sql)
+
+
+        # sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(name, cost)
+        # cur = connection.cursor()
+        # cur.execute(sql)
+        connection.commit()
+        # print("Successfully added new ingredient")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
+        exit()
+
 
 
 def newIngredient():
-    pass
+    try:
+        name = input("Ingredient name: ")
+        cost = int(input("Cost: "))
+        sql = "INSERT INTO Ingredients (`Name`, `Cost`) VALUES ('{}', {});".format(name, cost)
+        cur = connection.cursor()
+        cur.execute(sql)
+        connection.commit()
+        print("Successfully added new ingredient")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
+
 
 
 def changeMealPrice():
@@ -92,7 +146,6 @@ def changeIngredientPrice():
         print("Error!!")
         print(e)
 
-
 def add_change_registered_mess():
     try:
         print("Changing mess registration")
@@ -117,8 +170,6 @@ def add_change_registered_mess():
         connection.rollback()
         print("Error!!")
         print(e)
-    pass
-
 
 def changeEmplyeeSalary():
     try:
@@ -155,6 +206,7 @@ def deleteFoodItem():
         print(e)
 
 
+
 def removeStudent():
     try:
         print("Deleting student")
@@ -170,6 +222,7 @@ def removeStudent():
         connection.rollback()
         print("Error!!")
         print(e)
+
 
 
 def requiredIngredients():
@@ -203,6 +256,7 @@ def requiredIngredients():
         connection.rollback()
         print("Error!!")
         print(e)
+
 
 
 def messMenu():
@@ -243,22 +297,84 @@ def generate_and_update_revenue():
 
 
 def registered_student_list():
-    '''
-    registered students in a mess
-    '''
-    pass
+    try:
+        mess = int(input("Mess Id: "))
+        meal = int(input("Meal Id: "))
+        cur = connection.cursor()
+        # sql = "SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {});".format(mess,meal)
+        sql = "SELECT roll_no, First_name, Last_name FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(mess,meal)
+        # sql = "SELECT (roll_no, First_name, Last_name) FROM Students WHERE roll_no IN(SELECT student_id FROM Registration WHERE (registered_mess_id = {})AND(meal_id = {}));".format(mess,meal)
+        # print("lol")
+        cur.execute(sql)
+        # print("lol")
+        all = cur.fetchall()
+        printAsTable(all)
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
+
+
+def printAsTable(row_list):
+    if len(row_list):
+        first = row_list[0]
+        headers = first.keys()
+        data=[]
+        for row in row_list:
+            newData = []
+            for col in headers:
+                newData.append(row[col])
+            data.append(newData)
+        print()
+        print(tabulate(data,headers=headers))
+    else:
+        print("EMPTY!")
 
 def view():
-    pass
+    try:
+        cur = connection.cursor()
+        sql = "SHOW TABLES;"
+        cur.execute(sql)
+        all = cur.fetchall()
+        print("AVAILABLE TABLES: ")
+        for i, table in enumerate(all):
+            print("{}. {}".format(i+1, table["Tables_in_{}".format(Database_name)]))
+        table_no = int(input("Enter table number: "))-1
+        cur = connection.cursor()
+        sql = "DESCRIBE {};".format(all[table_no]["Tables_in_{}".format(Database_name)])
+        cur.execute(sql)
+        columns = cur.fetchall()
+        headers = []
+        for field in columns:
+            headers.append(field["Field"])
+        cur = connection.cursor()
+        sql = "SELECT * FROM {};".format(all[table_no]["Tables_in_{}".format(Database_name)])
+        cur.execute(sql)
+        all = cur.fetchall()
+        data = []
+        for row in all:
+            new_row = []
+            for col in headers:
+                new_row.append(row[col])
+            data.append(new_row)
+        print("")
+        print(tabulate(data, headers=headers))
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
 
 def logout():
     connection.close()
     print("Closed the database")
     exit()
 
-username = "istasis"
-password = "ista2000"
 
+username = "BIP"
+password = "BIP"
+Database_name = "LOL"
 # username = input("Username: ")
 # password = input("Password: ")
 
@@ -277,6 +393,7 @@ options.append(["View required ingredients", requiredIngredients])
 options.append(["View mess menu", messMenu])
 options.append(["View meal in sorted order", sortMeal])
 options.append(["Generate or update revenue", generate_and_update_revenue])
+options.append(["Registered Student List", registered_student_list])
 options.append(["View any table", view])
 options.append(["Logout", logout])
 
@@ -284,7 +401,7 @@ try:
     connection = pymysql.connect(host='localhost',
                                  user=username,
                                  password=password,
-                                 db='mess_database',
+                                 db=Database_name,
                                  cursorclass=pymysql.cursors.DictCursor)
     print("Accessed Database Successfully")
     while(1):
@@ -302,5 +419,3 @@ try:
 
 except Exception as e:
     print(e)
-
-
