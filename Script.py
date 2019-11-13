@@ -336,6 +336,7 @@ def generate_and_update_revenue():
         all = cur.fetchall()
         for mess in all:
             id = mess['Mess_id']
+            name = mess['Name']
             total_cost = 0
             expected_revenue = 0
             total_revenue = 0
@@ -368,6 +369,7 @@ def generate_and_update_revenue():
                 cur.execute(sql)
                 actual_students = cur.fetchall()[0]["COUNT(*)"]
                 total_revenue += actual_students * price
+            print("mess: {} had cost of {}, expected revenue: {} and total revenue {}".format(name, total_cost, expected_revenue, total_revenue))
             sql = "INSERT INTO Revenue (`Mess_id`, `Meal_id`, `Date`, `Cost`, `Expected_revenue`, `Actual_revenue`) VALUES ({}, {}, '{}',{},{},{})".format(
                 id, meal, date, total_cost, expected_revenue, total_revenue)
             cur =connection.cursor()
@@ -462,7 +464,7 @@ def logout():
 
 username = "BIP"
 password = "BIP"
-Database_name = "MESS_DATABASE"
+Database_name = "LOL"
 
 options = []
 options.append(["Add New student", newStudent])
