@@ -260,7 +260,28 @@ def requiredIngredients():
 
 
 def messMenu():
-    pass
+    try:
+        print("Displaying mess menu")
+        mess_id = int(input("Mess ID: "))
+        day = str(input("Day: "))
+        time = str(input("Time: "))
+        # noinspection SqlNoDataSourceInspection
+        sql = "SELECT Name FROM Food_items WHERE Menu_id IN (SELECT Menu_id FROM Menu, (SELECT Meal_id FROM Meal WHERE Day = '{}' AND Time = '{}') A WHERE Mess_id = {} AND Menu.Meal_id = A.Meal_id);".format(day, time, mess_id)
+        cur = connection.cursor()
+        cur.execute(sql)
+        rows = cur.fetchall()
+        desc = cur.description
+
+        print("{0:>20}".format(desc[0][0]))
+
+        for row in rows:
+            print("{0:>20}".format(row['Name']))
+        print("Displayed Mess Menu")
+
+    except Exception as e:
+        connection.rollback()
+        print("Error!!")
+        print(e)
 
 
 def sortMeal():
@@ -372,9 +393,9 @@ def logout():
     exit()
 
 
-username = "BIP"
-password = "BIP"
-Database_name = "LOL"
+username = "istasis"
+password = "ista2000"
+Database_name = "mess_database"
 # username = input("Username: ")
 # password = input("Password: ")
 
